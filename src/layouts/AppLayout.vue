@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SidebarNav from '@/components/SidebarNav.vue'
+import SidebarNav from '@/components/Dashboard/SidebarNav.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
 const auth = useAuthStore(); const router = useRouter()

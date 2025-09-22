@@ -1,4 +1,11 @@
-export type MenuItem = { label: string; icon?: string; to?: string; roles?: string[]; children?: MenuItem[] }
+export type MenuItem = { 
+  label: string; 
+  icon?: string; 
+  to?: string; 
+  roles?: string[]; 
+  children?: MenuItem[] 
+}
+
 export const MENU: MenuItem[] = [
   { label: 'Inicio', icon: 'home', to: '/app/dashboard', roles: ['HomeShow'] },
   { label: 'Requisiciones', icon: 'assignment', to: '/app/requisitions', roles: ['HomeShow'] },

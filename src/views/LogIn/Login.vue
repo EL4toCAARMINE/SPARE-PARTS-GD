@@ -29,16 +29,14 @@ const onSubmit = async () => {
 </script>
 
 <template>
-  <div class="h-screen w-screen bg-cover bg-center flex items-center justify-center relative"
-       style="background-image: url('/warehouse-bg.jpg')">
-    <div class="absolute inset-0 bg-black/25"></div>
+  <div class="h-screen w-screen bg-cover bg-center flex items-center justify-center relative z-1 container-login">
+    <div class="absolute inset-0 bg-black/25 z-2"></div>
 
-    <div class="relative bg-black/50 p-10 rounded-2xl w-full max-w-md text-center text-white shadow-2xl backdrop-blur-sm">
-        <div class="mx-auto mb-6 h-40 w-40 rounded-full bg-[#ECEBD6] flex items-center justify-center shadow-lg ring-4 ring-white/20">
-        <img src="/gd-logo.jpg" alt="Global Denim" class="h-20 w-20 object-contain" />
-      </div>
+    <div class="relative bg-black/50 rounded-2xl w-full max-w-md text-center text-white shadow-2xl backdrop-blur-sm z-3 container-form">
 
-      <h1 class="text-3xl font-bold mb-6">Bienvenido !</h1>
+      <img src="@/assets/logo.webp" alt="Global Denim" class="h-45 w-45 object-contain aspect-square" />
+
+      <h1 class="text-3xl font-bold mb-6 colorprueba">Bienvenido !</h1>
 
       <form class="space-y-4" @submit.prevent="onSubmit">
         <div class="flex items-center bg-white rounded-md px-3">
@@ -91,5 +89,5 @@ const onSubmit = async () => {
 </template>
 
 <style>
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import '@/styles/login/login.scss';
 </style>
