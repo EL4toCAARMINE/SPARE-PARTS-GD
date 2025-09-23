@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import api from '@/services/api'
 import type { ApiResponse, UserApiDTO } from '@/types/auth'
+import showToast from '../utils/showToast';
 
 type User = {
   id: number
@@ -32,29 +33,33 @@ export const useAuthStore = defineStore('auth', {
           password,
         })
 
-        if (!data.response || !data.Data) {
-          return { ok: false, message: data.message || 'No se pudo iniciar sesión' }
+        if (data.response && data.Data != null) {
+
+          const dto = data.Data
+
+          this.user = {
+            id: dto.userID,
+            name: dto.name,
+            userName,
+            departmentId: dto.departmentID,
+            department: dto.department,
+            roll: dto.roll,
+          }
+          this.token = dto.token
+          this.userRoles = dto.roles || []
+          this.expiration = dto.expiration ?? 0
+
+          this._persist()
+          return data;
+        } else {
+          return data;
         }
-
-        const dto = data.Data
-
-        this.user = {
-          id: dto.userID,
-          name: dto.name,
-          userName,
-          departmentId: dto.departmentID,
-          department: dto.department,
-          roll: dto.roll,
+      } catch (error) {
+        return {
+          response: false,
+          message: 'Error al conectar con el servidor',
+          Data: null
         }
-        this.token = dto.token
-        this.userRoles = dto.roles || []
-        this.expiration = dto.expiration ?? 0
-
-        this._persist()
-        return { ok: true }
-      } catch (err: any) {
-        const msg = err?.response?.data?.message || err?.message || 'Error de red'
-        return { ok: false, message: msg }
       }
     },
 

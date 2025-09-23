@@ -1,10 +1,10 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-* {
+html {
     padding: 0;
     margin: 0;
-    font-size: 10px;
+    font-size: 62.5%;
     font-family: OpenSansRegular, Arial, Helvetica, sans-serif;
     box-sizing: border-box;
     -webkit-box-sizing: border-box;

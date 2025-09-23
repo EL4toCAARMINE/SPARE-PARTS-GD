@@ -1,3 +1,74 @@
-.container-login{
-    background-image: url('/warehouse-bg.jpg');
+.container-login {
+    background-image: url("/warehouse-bg.jpg");
+
+    .container-form {
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+        width: 350px; 
+        max-width: 350px;
+
+        .title-welcome {
+            font-size: 3rem;
+            font-family: OpenSansBolder;
+            color: $beige;
+            text-shadow: #ffffff 0 0 20px;
+        }
+
+        form {
+            div {
+                padding: 5px;
+
+                input {
+                    font-size: 1.4rem;
+                    font-family: OpenSansSemiBold;
+                    padding-block: 5px;
+                }
+            }
+
+            a {
+                font-size: 1.2rem;
+                font-family: OpenSansSemiBold;
+                margin-block: 10px;
+            }
+
+            button {
+                padding: 10px;
+                
+                span {
+                    font-family: OpenSansSemiBold;
+                    font-size: 1.3rem;
+                }
+            }
+
+            .error-text {
+                font-family: OpenSansSemiBold;
+                font-size: 1.3rem;
+                padding: 10px;
+            }
+
+            .icon-ify {
+                font-size: 2rem;
+                margin-inline: 7px 10px;
+
+                * {
+                    color: #000;
+                }
+            }
+
+            .icon-login {
+                * {
+                    color: #fff;
+                }
+            }
+        }
+
+        .info-bottom {
+            text-align: center;
+            font-family: OpenSansBold;
+            font-size: 1.1rem;
+        }
+    }
 }
