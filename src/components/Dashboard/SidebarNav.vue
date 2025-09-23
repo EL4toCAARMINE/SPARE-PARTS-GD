@@ -72,6 +72,4 @@ const go = (to?: string) => to && router.push(to)
   </aside>
 </template>
 
-<style>
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
-</style>
+<style src="@/styles/components/dashboard/sidebarNav.scss" lang="scss"></style>

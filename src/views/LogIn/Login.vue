@@ -3,7 +3,6 @@ import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { Icon } from '@iconify/vue';
-import showToast from '@/utils/showToast';
 
 const employeeNo = ref('');
 const password = ref('');
