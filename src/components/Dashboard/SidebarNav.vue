@@ -25,12 +25,11 @@ const go = (to?: string) => to && router.push(to)
   <aside class="h-screen bg-[#2f3b46] text-white shadow-xl transition-all duration-200 container-nav-menu"
     :class="opened ? 'w-90' : 'w-20'">
 
-    <div class="flex items-center justify-center gap-3 px-4 py-4 border-b border-white/10 header-menu">
-      <img v-if="opened" src="@/assets/logo.webp"
-        class="rounded-full bg-[#ECEBD6] w-10 h-10 object-contain aspect-square" />
+    <div class="flex flex-row items-center gap-3 px-4 py-4 border-b border-white/10 header-menu" :class="opened ? 'justify-between' : 'justify-center'">
+      <img v-if="opened" src="@/assets/logo.webp" class="rounded-full bg-[#ECEBD6] w-10 h-10 object-contain aspect-square" />
       <h3 v-if="opened" class="title-menu">MENÚ</h3>
-      <button class="ml-auto opacity-80 hover:opacity-100 hover:cursor-pointer" @click="opened = !opened">
-        <Icon class="icon-ify icon-menu" icon="stash:burger-classic" />
+      <button class="opacity-80 hover:opacity-100 hover:cursor-pointer" @click="opened = !opened">
+        <Icon class="icon-ify icon-menu"  style="font-size: 2.5rem;" icon="stash:burger-classic" />
       </button>
     </div>
 
@@ -41,8 +40,7 @@ const go = (to?: string) => to && router.push(to)
         <li v-for="(item, i) in filteredMenu" :key="i">
 
           <button v-if="!item.children" @click="go(item.to)"
-            class="w-full flex items-center gap-3 px-3 py-2 rounded-md hover:bg-white/10 hover:cursor-pointer transition button-menu"
-            :class="isActive(item.to) ? 'bg-white/15 ring-1 ring-white/10' : ''">
+            class="w-full flex flex-row justify-center items-center gap-3 px-3 py-2 rounded-md hover:bg-white/10 hover:cursor-pointer transition button-menu" :class="[isActive(item.to) ? 'bg-white/15 ring-1 ring-white/10' : '', opened ? 'justify-start' : 'justify-center']">
 
             <Icon :icon="item.icon!" class="icon-ify icon-menu opacity-80" />
             <span v-if="opened">{{ item.label }}</span>
@@ -51,8 +49,7 @@ const go = (to?: string) => to && router.push(to)
 
           <details v-else class="group">
 
-            <summary
-              class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer list-none button-menu">
+            <summary class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer list-none button-menu" :class="opened ? 'justify-start' : 'justify-center'" @click="() => (!opened && (opened = true))">
               <Icon :icon="item.icon!" class="icon-ify icon-menu opacity-80" />
               <span v-if="opened" class="flex-1">{{ item.label }}</span>
               <Icon icon="dashicons:arrow-down-alt2" v-if="opened" class="icon-ify icon-menu ml-auto transform group-open:rotate-180 transition"/>
