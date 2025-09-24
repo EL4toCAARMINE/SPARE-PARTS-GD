@@ -51,13 +51,13 @@ const onSubmit = async () => {
       <form class="flex flex-col items-center gap-5 w-full h-auto" @submit.prevent="onSubmit">
 
         <div class="flex items-center flex-row w-full bg-white rounded-xl">
-          <Icon class="icon-ify" icon="fa6-regular:user" />
+          <Icon class="icon-ify icon-input" icon="fa6-regular:user" />
           <input v-model="employeeNo" type="text" placeholder="No. de Trabajador"
             class="w-full rounded-md outline-none text-black" autocomplete="username" required maxlength="100" />
         </div>
 
         <div class="flex items-center flex-row w-full bg-white rounded-xl">
-          <Icon class="icon-ify" icon="material-symbols:password-2" />
+          <Icon class="icon-ify icon-input" icon="material-symbols:password-2" />
           <input v-model="password" type="password" placeholder="Contraseña"
             class="w-full rounded-md outline-none text-black" autocomplete="current-password" required
             maxlength="100" />

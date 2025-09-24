@@ -15,14 +15,14 @@ const logout = () => { auth.logout(); router.push({ name: 'login' }) }
 
       <header class="h-14 bg-white shadow-sm flex items-center justify-between pl-4 layout-header">
         <div class="flex items-center gap-2">
-          <Icon class="icon-ify" icon="flat-color-icons:home" style="font-size: 2.5rem; margin-right: 10px;" />
-          <h2 class="font-semibold text-black">Requisitions <span class="text-gray-500">System</span></h2>
+          <Icon class="icon-ify icon-home" icon="solar:card-bold"/>
+          <h2 class="font-semibold text-black">Sistema de <span class="text-gray-500">Requisiciones</span></h2>
         </div>
 
         <div class="flex items-center gap-6 text-black h-full">
           <p>Hola, <strong>{{ auth.user?.name }}</strong></p>
-          <button @click="logout" class="flex flex-row items-center justify-aroundb gap-5 h-full bg-[#ff0000] text-white hover:bg-black transition rounded-l-2xl">
-            Cerrar sesión
+          <button @click="logout" class="flex flex-row items-center justify-around gap-5 h-full bg-[#ff0000] text-white hover:bg-black  transition-all duration-300">
+            <!-- Cerrar sesión -->
             <Icon class="icon-ify icon-logout" icon="tdesign:logout" />
           </button>
         </div>
@@ -69,6 +69,15 @@ const logout = () => { auth.logout(); router.push({ name: 'login' }) }
     font-size: 1.8rem;
     *{
       color: #fff;
+    }
+  }
+
+  .icon-home{
+    font-size: 2.5rem; 
+    margin-right: 5px;
+    
+    *{
+      color: #000;
     }
   }
 }
