@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
+import { ref } from 'vue';
+
+const seeMotivation = ref<boolean>(false);
 
 </script>
 
 <template>
-  <div class="w-full h-full p-8 flex flex-col items-center gap-10 container-dash">
+  <div class="w-full h-auto p-8 flex flex-col items-center justify-start gap-10 container-dash">
 
     <div
       class="w-full flex flex-row items-center gap-7 justify-between min-h-5 h-auto px-8 py-4 rounded-2xl border-1 border-[#2b9a66] bg-transparent container-doc-link">
@@ -31,7 +34,7 @@ import { Icon } from '@iconify/vue';
 
       <div class="absolute left-0 fade-right"></div>
 
-      <div class="flex flex-col justify-between texts">
+      <div class="flex flex-col justify-between gap-5 texts">
         <h2 class="title ">Crea y administra requisiciones fácilmente</h2>
         <a title="Get Started" href=""
           class="flex flex-row items-center justify-center gap-5 px-10 py-3 bg-[#376af5] w-fit h-fit hover:cursor-pointer rounded-xl btn-get-started">
@@ -42,6 +45,12 @@ import { Icon } from '@iconify/vue';
       <img class="image-new-req" src="@/assets/docs.png" alt="Imagen documentos">
     </div>
 
+    <div v-if="seeMotivation" class="w-full flex flex-row items-center justify-around border-4 border-black overflow-hidden rounded-2xl relative motivation">
+      <div class="absolute left-0 fade-right"></div>
+      
+      <h3 class="relative">Que tu<br>magia sea <br> <span>No rendirte</span></h3>
+      <img class="relative" src="@/assets/asta.png" alt="Motivación">
+    </div>
   </div>
 </template>
 

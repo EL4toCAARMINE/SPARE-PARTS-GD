@@ -1,8 +1,8 @@
 <template>
-  <div class="h-screen overflow-hidden bg-[#f2f2f2] flex">
+  <div class="h-screen bg-[#f2f2f2] flex flex-row">
     <SidebarNav />
 
-    <main class="flex-1 flex flex-col min-h-0">
+    <main class="w-full h-full flex flex-col min-h-0">
 
       <header class="h-16 bg-white shadow-sm flex items-center justify-between layout-header relative">
         <div class="flex items-center gap-2 left-4 absolute">
@@ -34,7 +34,7 @@
         </div>
       </header>
 
-      <section class="flex-1 min-h-0 overflow-hidden">
+      <section class="h-full min-h-0 overflow-y-auto">
         <router-view />
       </section>
 

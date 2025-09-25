@@ -1,4 +1,6 @@
 .container-dash {
+    // overflow-y: scroll;
+
     .container-doc-link {
         background-color: rgba($main-green, 0.05);
 
@@ -47,7 +49,7 @@
     .container-new-req {
         position: relative;
         overflow: hidden;
-        max-height: 250px;
+        height: 250px;
         box-shadow: 0 0 20px #00000030;
         user-select: none;
 
@@ -99,6 +101,51 @@
             object-fit: contain;
             aspect-ratio: 1/1;
             position: relative;
+        }
+    }
+
+    .motivation{
+        height: 250px;
+        background: #fff;
+        box-shadow: 0 0 20px #00000030;
+
+        .fade-right {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: url("@/assets/flame.png");
+            background-repeat: repeat-x;
+            background-position: bottom;
+            background-size: contain;
+            display: block;
+            -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0) 100%);
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-size: cover;
+            mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0) 100%);
+            mask-repeat: no-repeat;
+            mask-size: cover;
+        }
+
+        h3{
+            font-size:5rem;
+            font-family: 'Times New Roman', Times, serif;
+            text-transform: capitalize;
+            font-weight: bolder;
+            text-align: center;
+            color: $main-black;
+
+            span{
+                font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+                text-transform: uppercase;
+                color: #000;
+                font-size: 7rem;
+            }
+        }
+
+        img{
+            height: 130%;
+            right: 0;
+            bottom: 0;
         }
     }
 }
