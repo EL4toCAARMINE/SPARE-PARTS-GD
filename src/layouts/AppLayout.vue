@@ -1,10 +1,10 @@
 <template>
-  <div class="h-screen overflow-hidden bg-[#eef1f5] flex">
+  <div class="h-screen overflow-hidden bg-[#f2f2f2] flex">
     <SidebarNav />
 
     <main class="flex-1 flex flex-col min-h-0">
 
-      <header class="h-14 bg-white shadow-sm flex items-center justify-between layout-header relative">
+      <header class="h-16 bg-white shadow-sm flex items-center justify-between layout-header relative">
         <div class="flex items-center gap-2 left-4 absolute">
           <Icon class="icon-ify icon-home" icon="solar:card-bold" />
           <h2 class="font-semibold text-black">Sistema de <span class="text-gray-500">Requisiciones</span></h2>
@@ -14,7 +14,7 @@
           class="absolute right-4 top-0 flex flex-col justify-start items-center gap-1 text-black h-auto z-10 container-user-menu"
           @mouseleave="openMenuUser = false">
           <div class="h-14 flex flex-row items-center gap-5">
-            <p class=" bg-gray-300 px-5 py-1 rounded-2xl h-fit user-welcome">Hola, <strong>{{ auth.user?.name }}</strong></p>
+            <p class="px-5 py-1 rounded-2xl h-fit user-welcome">Hola, <strong>{{ auth.user?.name }}</strong></p>
             <button @click="openMenuUser = !openMenuUser"
               class="flex flex-row items-center justify-around aspect-square rounded-full bg-black hover:bg-gray-600 hover:cursor-pointer transition duration-300 user-button">
               <Icon class="icon-ify icon-user-button" icon="icon-park-solid:user-business" />
@@ -34,7 +34,7 @@
         </div>
       </header>
 
-      <section class="flex-1 min-h-0 overflow-hidden p-6">
+      <section class="flex-1 min-h-0 overflow-hidden">
         <router-view />
       </section>
 

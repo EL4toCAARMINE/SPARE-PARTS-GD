@@ -1,16 +1,48 @@
 <script setup lang="ts">
+import { Icon } from '@iconify/vue';
+
 </script>
 
 <template>
-  <div class="w-auto bg-gray-500/95 text-white rounded-2xl px-10 py-12 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.5)]">
-    <div class="text-center space-y-6">
-      <div class="uppercase font-bold tracking-widest text-white/80">WELCOME</div>
-      <div class="text-4xl sm:text-5xl font-extrabold tracking-wide">SPARE PARTS</div>
-      <div class="text-2xl font-bold">SYSTEM</div>
-      <div class="flex justify-center">
-        <img src="/logo.png" class="opacity-80 max-h-56 select-none" />
+  <div class="w-full h-full p-8 flex flex-col items-center gap-10 container-dash">
+
+    <div
+      class="w-full flex flex-row items-center gap-7 justify-between min-h-5 h-auto px-8 py-4 rounded-2xl border-1 border-[#2b9a66] bg-transparent container-doc-link">
+      <div class="p-4 rounded-2xl bg-[#2b9a66] icon-div">
+        <Icon icon="streamline:manual-book-solid" class="icon-ify icon-doc" />
       </div>
-      <p class="text-xl sm:text-2xl font-semibold">¡Haz lo que puedas con lo que tienes, donde estás.!</p>
+
+      <div class="flex-1 h-full flex flex-col items-start justify-center gap-1 texts-doc">
+        <h4 class="title">Manual de Usuario</h4>
+        <p class="description">
+          Este manual te guiará en el uso del sistema y sus funcionalidades.
+        </p>
+      </div>
+
+      <a href="" target="_blank" title="Mete aqui nombre del documento"
+        class="flex flex-row items-center justify-center gap-3 px-5 py-3 hover:cursor-pointer rounded-xl border-1 border-[#2b9a66] bg-white go-to-doc">
+        Ir al Manual
+        <Icon icon="icomoon-free:arrow-up-right2" class="icon-ify icon-doc-btn" />
+      </a>
     </div>
+
+    <div
+      class="w-full rounded-2xl flex flex-row justify-between items-center p-10 bg-gradient-to-r from-[#496fd650] to-[#9D50DC20] container-new-req">
+
+      <div class="absolute left-0 fade-right"></div>
+
+      <div class="flex flex-col justify-between texts">
+        <h2 class="title ">Crea y administra requisiciones fácilmente</h2>
+        <a title="Get Started" href=""
+          class="flex flex-row items-center justify-center gap-5 px-10 py-3 bg-[#376af5] w-fit h-fit hover:cursor-pointer rounded-xl btn-get-started">
+          Crear una Requi
+          <Icon icon="streamline-ultimate:startup-product-rocket-box-bold" class="icon-ify icon-get-started" />
+        </a>
+      </div>
+      <img class="image-new-req" src="@/assets/docs.png" alt="Imagen documentos">
+    </div>
+
   </div>
 </template>
+
+<style lang="scss" src="@/styles/views/dashboard.scss"></style>

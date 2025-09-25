@@ -39,7 +39,7 @@
         margin-right: 5px;
 
         * {
-            color: #000;
+            color: $main-blue;
         }
     }
 
@@ -52,6 +52,8 @@
             text-overflow: ellipsis;
             position: relative;
             max-width: 180px;
+            color: #fff;
+            background-color: $main-purple;
         }
 
         .user-button {

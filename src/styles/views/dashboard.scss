@@ -1,0 +1,104 @@
+.container-dash {
+    .container-doc-link {
+        background-color: rgba($main-green, 0.05);
+
+        .icon-div {
+            .icon-doc {
+                * {
+                    color: #fff;
+                }
+            }
+        }
+
+        .texts-doc {
+            .title {
+                font-size: 1.4rem;
+                font-family: OpenSansBold;
+                color: $main-green;
+            }
+
+            .description {
+                font-size: 1.3rem;
+                font-family: OpenSansSemiBold;
+                color: $main-green;
+            }
+        }
+
+        .go-to-doc {
+            font-family: OpenSansBold;
+            font-size: 1.3rem;
+            color: $main-green;
+            transition: all 0.3s ease-in-out;
+
+            .icon-doc-btn {
+                font-size: 1.4rem;
+
+                * {
+                    color: $main-green;
+                }
+            }
+
+            &:hover {
+                scale: 1.05;
+            }
+        }
+    }
+
+    .container-new-req {
+        position: relative;
+        overflow: hidden;
+        max-height: 250px;
+        box-shadow: 0 0 20px #00000030;
+        user-select: none;
+
+        .fade-right {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: url("@/assets/textura.png");
+            display: block;
+            -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.4) 20%, rgba(0, 0, 0, 0) 100%);
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-size: cover;
+            mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.4) 20%, rgba(0, 0, 0, 0) 100%);
+            mask-repeat: no-repeat;
+            mask-size: cover;
+        }
+
+        .texts {
+            width: 70%;
+            height: 100%;
+            position: relative;
+
+            h2 {
+                color: $main-blue;
+                font-size: 3rem;
+                font-family: OpenSansBold;
+            }
+
+            .btn-get-started {
+                font-size: 1.5rem;
+                font-family: OpenSansSemiBold;
+                color: #fff;
+                transition: all 0.3s ease;
+
+                .icon-get-started {
+                    * {
+                        color: #fff;
+                    }
+                }
+
+                &:hover {
+                    scale: 1.05;
+                }
+            }
+        }
+
+        .image-new-req {
+            height: 175%;
+            object-fit: contain;
+            aspect-ratio: 1/1;
+            position: relative;
+        }
+    }
+}
