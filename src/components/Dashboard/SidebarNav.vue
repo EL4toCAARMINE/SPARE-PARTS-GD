@@ -22,7 +22,7 @@ const go = (to?: string) => to && router.push(to)
 </script>
 
 <template>
-  <aside class="h-screen bg-[#2f3b46] text-white shadow-xl transition-all duration-200 container-nav-menu"
+  <aside class="h-screen bg-gradient-to-tr from-[#2649AB] to-[#9D50DC] text-white shadow-xl transition-all duration-200 container-nav-menu"
     :class="opened ? 'w-90' : 'w-20'">
 
     <div class="flex flex-row items-center gap-3 px-4 py-4 border-b border-white/10 header-menu" :class="opened ? 'justify-between' : 'justify-center'">
@@ -39,8 +39,7 @@ const go = (to?: string) => to && router.push(to)
 
         <li v-for="(item, i) in filteredMenu" :key="i">
 
-          <button v-if="!item.children" @click="go(item.to)"
-            class="w-full flex flex-row justify-center items-center gap-3 px-3 py-2 rounded-md hover:bg-white/10 hover:cursor-pointer transition button-menu" :class="[isActive(item.to) ? 'bg-white/15 ring-1 ring-white/10' : '', opened ? 'justify-start' : 'justify-center']">
+          <button v-if="!item.children" @click="go(item.to)" class="w-full flex flex-row justify-center items-center gap-3 px-3 py-2 rounded-md hover:bg-white/10 hover:cursor-pointer transition button-menu" :class="[isActive(item.to) ? 'bg-white/15 ring-1 ring-white/10' : '', opened ? 'justify-start' : 'justify-center']">
 
             <Icon :icon="item.icon!" class="icon-ify icon-menu opacity-80" />
             <span v-if="opened">{{ item.label }}</span>

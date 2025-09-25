@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <div class="max-w-5xl mx-auto bg-gray-500/95 text-white rounded-2xl px-10 py-12 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.5)]">
+  <div class="w-auto bg-gray-500/95 text-white rounded-2xl px-10 py-12 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.5)]">
     <div class="text-center space-y-6">
       <div class="uppercase font-bold tracking-widest text-white/80">WELCOME</div>
       <div class="text-4xl sm:text-5xl font-extrabold tracking-wide">SPARE PARTS</div>
