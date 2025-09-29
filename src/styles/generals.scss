@@ -1,6 +1,126 @@
-$main-purple: #9D50DC;
-$main-blue: #2649AB;
+$main-purple: #9d50dc;
+$main-blue: #2649ab;
 $main-green: #2b9a66;
 $main-black: #292929;
 
 $beige: beige;
+
+.button-squeleton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-family: OpenSansSemiBold;
+  background: #000000;
+  color: #ffffff;
+  padding: 5px 10px;
+  gap: 5px;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #464646;
+  }
+
+  .icon-button {
+    font-size: 2rem;
+
+    * {
+      color: #ffffff;
+    }
+  }
+
+  .icon-button-dark {
+    font-size: 2rem;
+
+    * {
+      color: #000000;
+    }
+  }
+}
+
+/* Variantes */
+.button-green {
+  background: #1fd545;
+  color: #ffffff;
+
+  &:hover {
+    background: #17ed4b;
+  }
+}
+
+.button-blue {
+  background: #1d4ed8;
+  color: #ffffff;
+
+  &:hover {
+    background: $main-blue;
+  }
+}
+
+.button-red {
+  background: #ff0000;
+  color: #ffffff;
+
+  &:hover {
+    background: #bb1818;
+  }
+}
+
+.button-purple {
+  background: $main-purple;
+  color: #ffffff;
+
+  &:hover {
+    background: #6b21a8;
+  }
+}
+
+.button-gray {
+  background: #374151;
+  color: #ffffff;
+
+  &:hover {
+    background: #1f2937;
+  }
+}
+
+.button-light {
+  background: #ffffff;
+  color: #111827;
+
+  &:hover {
+    background: #e1e1e1;
+  }
+}
+
+.button-yellow {
+  background: #f59e0b;
+
+  &:hover {
+    background: #d97706;
+  }
+}
+
+.button-alternative {
+  background: #ffffff;
+  color: #000;
+  border: 1px solid #000;
+
+  &:hover {
+    background: #e1e1e1;
+    color: $main-blue;
+  }
+}
+
+.button-gradient {
+  background: linear-gradient(45deg, $main-blue, $main-purple);
+
+  &:hover {
+    background: linear-gradient(45deg, $main-blue, $main-purple);
+    opacity: .8;
+  }
+}

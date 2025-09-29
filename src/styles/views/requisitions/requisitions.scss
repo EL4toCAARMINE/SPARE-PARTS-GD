@@ -1,0 +1,45 @@
+.container-requisitions-view {
+    .requisitions-title {
+        font-size: 2rem;
+        font-family: OpenSansBold;
+        color: $main-blue;
+    }
+
+    .tab-container-bg {
+        box-shadow: 0 0 10px #00000050;
+
+        .button-tab-default {
+            background-color: #fff;
+            font-size: 1.1rem;
+            font-family: OpenSansBold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #dddddd;
+            }
+        }
+
+        .button-tab-active {
+            background: linear-gradient(45deg, $main-blue, $main-purple);
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+    }
+
+    .table-container {
+
+        .search-data-container{
+            border: 2px solid #000;
+
+            input{
+                font-family: OpenSansSemiBold;
+                font-size: 1.3rem;
+            }
+
+            .button-search{
+                border-radius: 0;
+            }
+        }
+    }
+}
