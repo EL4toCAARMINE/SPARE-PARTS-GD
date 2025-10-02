@@ -27,3 +27,15 @@
   src: url('../assets/fonts/Open_Sans/static/OpenSans-ExtraBold.ttf') format('truetype');
   font-weight: bolder;
 }
+
+@font-face {
+  font-family: 'MetalMania';
+  src: url('../assets/fonts/Metal_Mania/MetalMania-Regular.ttf') format('truetype');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'BebasNeue';
+  src: url('../assets/fonts/Bebas_Neue/BebasNeue-Regular.ttf') format('truetype');
+  font-weight: normal;
+}

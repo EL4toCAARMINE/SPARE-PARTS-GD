@@ -27,12 +27,12 @@
               <Icon icon="bxs:search" class="ml-2 icon-ify icon-search" />
               <input maxlength="30" type="text" v-model="searchModel" placeholder="Buscar…" class="grow border-none outline-none bg-transparent" />
             </div>
-            <button class="join-item button-squeleton button-search" @click="fetchData(1)">Buscar</button>
+            <button class="join-item button-squeleton button-purple button-search" @click="fetchData(1)">Buscar</button>
           </div>
         </div>
 
-        <div class="flex-1 min-h-0 rounded-lg border border-base-300 overflow-auto">
-          <table class="table table-sm w-full">
+        <div class="flex-1 min-h-0 rounded-lg border border-base-300 overflow-auto table-content-container">
+          <table class="table table-sm w-full" :class="rows.length > 0 ? 'h-auto' : 'h-full'">
             <thead class="sticky top-0 z-10 bg-base-200">
               <tr>
                 <th class="w-28">Status</th>
@@ -45,28 +45,28 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-if="loading">
-                <td colspan="7">
-                  <div class="flex items-center gap-3">
-                    <span class="loading loading-spinner loading-sm"></span> Cargando…
+              <tr class="flex-1" v-if="loading">
+                <td colspan="7" class="flex-1">
+                  <div class="flex items-center justify-center h-full gap-3">
+                    <span class="loading loading-spinner loading-xl"></span> Cargando…
                   </div>
                 </td>
               </tr>
-              <tr v-else-if="errorMsg">
-                <td colspan="7" class="text-error">{{ errorMsg }}</td>
+              <tr v-else-if="errorMsg && (rows == null || rows.length == 0)">
+                <td colspan="7" class="text-center text-error">{{ errorMsg }}</td>
               </tr>
               <tr v-else-if="rows.length === 0">
-                <td colspan="7" class="opacity-70">Sin resultados.</td>
+                <td colspan="7" class="text-center no-data opacity-70">Sin resultados</td>
               </tr>
-              <tr v-for="r in rows" :key="r.id" class="bg-yellow-50/60">
+              <tr v-for="r in rows" :key="r.id" class="bg-yellow-50/60 row-container">
                 <td>
-                  <div class="flex items-center gap-2">
-                    <span class="badge" :class="statusBadge(r.situationId).cls">
+                  <div class="flex items-center">
+                    <span class="badge p-4 rounded-xl text-nowrap" :class="statusBadge(r.situationId).cls">
                       {{ statusBadge(r.situationId).text }}
                     </span>
                   </div>
                 </td>
-                <td class="font-medium">{{ r.folio }}</td>
+                <td class="font-medium ">{{ r.folio }}</td>
                 <td>{{ r.folioSap }}</td>
                 <td>{{ r.requesterName }}</td>
                 <td>{{ fmtDate(r.documentDate) }}</td>
@@ -77,15 +77,16 @@
           </table>
         </div>
 
-        <div class="flex items-center justify-between mt-2 shrink-0">
+        <div class="flex items-center justify-between mt-2 shrink-0 bottom-table">
           <div class="text-sm opacity-70">
             {{ startIndex }} - {{ endIndex }} de {{ pagination.totalCount }} elementos
           </div>
 
           <div class="flex items-center gap-3">
             <div class="dropdown dropdown-top dropdown-end">
-              <div tabindex="0" role="button" class="btn btn-sm">
-                {{ pagination.pageSize }} <span class="material-icons text-base">expand_more</span>
+              <div tabindex="0" role="button" class="btn btn-sm gap-3">
+                <Icon class="icon-ify icon-expand" icon="si:expand-more-alt-duotone" />
+                {{ pagination.pageSize }} 
               </div>
               <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-50 w-40 p-2 shadow">
                 <li><a @click="changePageSize(10)">10</a></li>
@@ -95,7 +96,7 @@
               </ul>
             </div>
 
-            <span class="text-sm">artículos por página</span>
+            <span class="text-sm">Artículos por página</span>
 
             <div class="join">
               <button class="join-item btn btn-sm" @click="goto(1)" :disabled="pagination.currentPage <= 1">«</button>
@@ -138,38 +139,81 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue'
-import api from '@/services/api'
-import { useAuthStore } from '@/stores/auth'
-import { Icon } from '@iconify/vue'
+import { onMounted, ref, computed } from 'vue';
+import api from '@/services/api';
+import { useAuthStore } from '@/stores/auth';
+import { Icon } from '@iconify/vue';
+import type { ReqItem } from '@/models/Requis';
 
-type ReqItem = {
-  id: number
-  folio: number
-  folioSap: number
-  requesterName: string
-  departmentName: string
-  requiredDate: string | null
-  documentDate: string | null
-  destination?: string | null
-  situationId: number
-}
 type PaginationDTO = { totalCount: number; pageSize: number; currentPage: number; totalPages: number }
 type ApiResponse<T> = { response: boolean; message: string; Data: T | null }
 type PageDTO = { data: ReqItem[]; pagination: PaginationDTO }
 
-const auth = useAuthStore()
+const auth = useAuthStore();
 
-const loading = ref(false)
-const errorMsg = ref<string | null>(null)
-const rows = ref<ReqItem[]>([])
-const pagination = ref<PaginationDTO>({ totalCount: 0, pageSize: 10, currentPage: 1, totalPages: 0 })
-const scope = ref<'mine' | 'area'>('mine')
+const loading = ref(false);
+const errorMsg = ref<string | null>(null);
+const rows = ref<ReqItem[]>([]);
+const pagination = ref<PaginationDTO>({ totalCount: 0, pageSize: 10, currentPage: 1, totalPages: 0 });
+const scope = ref<'mine' | 'area'>('mine');
+
+const reqItems: ReqItem[] = [
+  {
+    id: 1,
+    folio: 1001,
+    folioSap: 91001,
+    requesterName: 'Juan Pérez',
+    departmentName: 'Sistemas',
+    requiredDate: '2025-10-15T10:00:00Z',
+    documentDate: '2025-10-02T09:00:00Z',
+    destination: 'Almacén Central',
+    situationId: 1
+  },
+  {
+    id: 2,
+    folio: 1002,
+    folioSap: 91002,
+    requesterName: 'María García',
+    departmentName: 'Contabilidad',
+    requiredDate: '2025-11-01T12:00:00Z',
+    documentDate: '2025-10-02T11:30:00Z',
+    destination: null,
+    situationId: 2
+  },
+  {
+    id: 3,
+    folio: 1003,
+    folioSap: 91003,
+    requesterName: 'Carlos López',
+    departmentName: 'Producción',
+    requiredDate: null,
+    documentDate: '2025-10-01T15:00:00Z',
+    destination: 'Línea de Ensamblaje 3',
+    situationId: 1
+  }
+];
 
 // Busqueda
 const q = ref('');
 const searchMine = ref('');
 const searchArea = ref('');
+
+const OpenModalNewRequi = () => {
+  alert("Opening modal")
+};
+
+onMounted(() => {
+  // Verificamos si en la URL existe el query 'accion' con el valor 'openModal'
+  if (history.state.action === 'openModalNewRequi') {
+    // Si existe, ejecutamos la función
+    OpenModalNewRequi();
+
+    // Limpiamos el state para que no se dispare el modal en caso de recargar la pagina
+    const newState = { ...history.state };
+    delete newState.action;
+    history.replaceState(newState, '', location.href);
+  }
+});
 
 // define de que variable el input de busqueda va a obtener y mostrar el value
 const searchModel = computed({
@@ -208,9 +252,9 @@ function fmtDate(value?: string | null) {
 
 function statusBadge(situationId: number) {
   switch (situationId) {
-    case 10: return { text: 'BLOQUEADA', cls: 'badge-ghost' }
-    case 2: return { text: 'EN PROCESO', cls: 'badge-info' }
-    case 3: return { text: 'AUTORIZADA', cls: 'badge-success' }
+    case 10: return { text: 'Bloqueada', cls: 'badge-ghost' }
+    case 2: return { text: 'En Proceso', cls: 'badge-info' }
+    case 3: return { text: 'Autorizada', cls: 'badge-success' }
     default: return { text: `#${situationId}`, cls: 'badge-neutral' }
   }
 }
@@ -229,11 +273,12 @@ async function fetchData(page = 1) {
     if (scope.value) params.scope = scope.value
 
     const { data } = await api.get<ApiResponse<PageDTO>>('/api/Requisitions', { params })
+    rows.value = reqItems;
     if (!data.response || !data.Data) {
       errorMsg.value = data.message || 'No se pudo obtener la información'
       rows.value = []
       pagination.value = { totalCount: 0, pageSize: pagination.value.pageSize, currentPage: 1, totalPages: 0 }
-      return
+      return;
     }
     rows.value = data.Data.data
     pagination.value = data.Data.pagination
@@ -245,7 +290,7 @@ async function fetchData(page = 1) {
 }
 
 function changePageSize(size: number) {
-  pagination.value.pageSize = size
+  pagination.value.pageSize = size;
   fetchData(1)
 }
 
@@ -254,7 +299,7 @@ function goto(p: number) {
   fetchData(p)
 }
 
-onMounted(() => fetchData(1))
+onMounted(() => fetchData(1));
 </script>
 
 <style src="@/styles/views/requisitions/requisitions.scss" lang="scss"></style>

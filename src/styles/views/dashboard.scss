@@ -1,3 +1,12 @@
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
 .container-dash {
     // overflow-y: scroll;
 
@@ -104,7 +113,7 @@
         }
     }
 
-    .motivation{
+    .motivation {
         height: 250px;
         background: #fff;
         box-shadow: 0 0 20px #00000030;
@@ -126,26 +135,32 @@
             mask-size: cover;
         }
 
-        h3{
-            font-size:5rem;
-            font-family: 'Times New Roman', Times, serif;
+        h3 {
+            font-size: 5.5rem;
+            font-family: BebasNeue;
             text-transform: capitalize;
             font-weight: bolder;
             text-align: center;
-            color: $main-black;
+            color: #d12300;
+            width: 50%;
+            text-shadow: 5px 5px 10px #00000070;
 
-            span{
-                font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            span {
+                font-family: MetalMania;
                 text-transform: uppercase;
-                color: #000;
+                color: $main-black;
                 font-size: 7rem;
             }
         }
 
-        img{
-            height: 130%;
-            right: 0;
+        .animated-image {
+            position: absolute;
             bottom: 0;
+            height: 115%;
+        }
+
+        .fade-in {
+            animation: fadeIn .5s ease-in-out forwards;
         }
     }
 }

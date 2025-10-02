@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import api from '@/services/api'
-import type { ApiResponse, UserApiDTO } from '@/types/auth'
+import type { ApiResponse, UserApiDTO } from '@/models/auth'
 import showToast from '../utils/showToast';
 
 type User = {
