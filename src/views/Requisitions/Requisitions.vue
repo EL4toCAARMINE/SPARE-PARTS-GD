@@ -14,21 +14,28 @@
 
     <div class="w-full h-full card bg-base-100 shadow-xl">
       <div class="card-body flex flex-col gap-4 min-h-0 table-container">
-
-        <div class="flex items-center gap-2 shrink-0">
-          <button v-if="auth.hasRole?.('RequisitionsAdd') && scope === 'mine'" class="button-squeleton button-green">
-            <Icon class="icon-ify icon-button" icon="gridicons:add" /> Nueva Requi
-          </button>
-          <button class="button-squeleton button-light" @click="openDates">
-            <Icon class="icon-ify icon-button-dark" icon="icon-park-solid:filter" /> Filtrar por fechas
-          </button>
-        </div>
-
-        <DynamicTable :headers="tableHeaders" :status-options="statusDefinitions" :original-items="displayRows"
-          :filtered-items="displayRows" :is-loading="loading" v-model:search-value="searchModel"
+        <DynamicTable 
+          :headers="tableHeaders" 
+          :status-options="statusDefinitions" 
+          :original-items="displayRows"
+          :filtered-items="displayRows" 
+          :is-loading="loading" 
+          v-model:search-value="searchModel"
           :error-message="errorMsg" :fetch-data="fetchData" status-key="situationId" search-key="folio"
           :show-search="true" :current-page-prop="pagination.currentPage" :total-pages-prop="pagination.totalPages"
-          :items-per-page-prop="pagination.pageSize" @pageChange="goto" @itemsPerPageChange="changePageSize" />
+          :items-per-page-prop="pagination.pageSize" @pageChange="goto" @itemsPerPageChange="changePageSize"
+        >
+          <template #header-content>
+            <div class="w-full flex-grow flex flex-row flex-wrap items-center gap-2 shrink-0">
+              <button v-if="auth.hasRole?.('RequisitionsAdd') && scope === 'mine'" class="button-squeleton button-green">
+                <Icon class="icon-ify icon-button" icon="gridicons:add" /> Nueva Requi
+              </button>
+              <button class="button-squeleton button-light" @click="openDates">
+                <Icon class="icon-ify icon-button-dark" icon="icon-park-solid:filter" /> Filtrar por fechas
+              </button>
+            </div>
+          </template>
+        </DynamicTable>
 
       </div>
     </div>

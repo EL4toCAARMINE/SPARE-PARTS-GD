@@ -1,12 +1,12 @@
 <template>
   <div class="dynamic-table-container bg-white p-4 rounded-lg shadow-md">
 
-    <header class="flex justify-between items-center mb-4">
-      <div class="flex-grow flex flex-row flex-wrap gap-2">
+    <header class="w-full overflow-hidden flex justify-between items-end mb-4 gap-5">
+      <div class="flex flex-row flex-wrap w-full max-w-full overflow-hidden">
         <slot name="header-content"></slot>
       </div>
 
-      <div v-if="showSearch" class="w-[300px] flex-shrink-0">
+      <div v-if="showSearch" class="w-fit flex-shrink-0">
         <div class="ml-auto join rounded-xl overflow-hidden search-data-container">
           <div class="join-item border-0 flex items-center gap-2 min-w-72 w-auto mr-3">
             <Icon icon="bxs:search" class="ml-2 icon-ify icon-search" />
