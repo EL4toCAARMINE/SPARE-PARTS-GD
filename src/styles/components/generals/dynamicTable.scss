@@ -1,0 +1,110 @@
+// Animación del Loader (se mantiene a nivel raíz)
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+// Contenedor principal del componente
+.dynamic-table-container {
+    // --- ENCABEZADO ---
+    header {
+         .search-data-container {
+            border: 2px solid $main-purple;
+
+            input {
+                font-family: OpenSansSemiBold;
+                font-size: 1.3rem;
+            }
+
+            .button-search {
+                border-radius: 0;
+            }
+        }
+    }
+
+    // --- TABLA ---
+    .table-wrapper {
+        border-color: $border-color;
+
+        table {
+            thead tr {
+                background-color: $light-grey;
+                th {
+                    color: $main-grey;
+                    &.table-header-text {
+                        font-family: "OpenSansBolder", sans-serif;
+                        font-size: 1.6rem;
+                    }
+                }
+            }
+            tbody tr {
+                border-color: $border-color;
+                &:hover {
+                    background-color: #f5f5f5;
+                }
+
+                // Estilos para las celdas y textos dentro del cuerpo de la tabla
+                .table-cell-text {
+                    font-family: "OpenSansRegular", sans-serif;
+                    font-size: 1.4rem;
+                }
+                .status-pill-text {
+                    font-family: "OpenSansBold", sans-serif;
+                    font-size: 1.2rem;
+                }
+                .loader-text,
+                .error-text {
+                    font-family: "OpenSansSemiBold", sans-serif;
+                    font-size: 1.4rem;
+                }
+                .no-data-text {
+                    font-family: "OpenSansRegular", sans-serif;
+                    font-size: 1.4rem;
+                }
+            }
+        }
+    }
+
+    // --- PIE DE PÁGINA ---
+    .table-footer {
+        color: $main-grey;
+        .items-per-page-select,
+        .page-input {
+            border-color: $border-color;
+            width: 60px;
+        }
+        .pagination-arrow {
+            border-color: $border-color;
+            &:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+        }
+
+        // Estilos de fuente para el footer
+        .footer-label-text {
+            font-family: "OpenSansRegular", sans-serif;
+            font-size: 1.4rem;
+        }
+        .footer-input-text {
+            font-family: "OpenSansSemiBold", sans-serif;
+            font-size: 1.4rem;
+        }
+        .footer-total-text {
+            font-family: "OpenSansLight", sans-serif;
+            font-size: 1.2rem;
+        }
+    }
+
+    // --- LOADER ---
+    .loader {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        display: inline-block;
+        border: 4px solid $border-color;
+        border-left-color: $main-purple;
+        animation: spin 1s linear infinite;
+    }
+}
