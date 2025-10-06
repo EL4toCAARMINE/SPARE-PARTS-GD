@@ -1,10 +1,10 @@
 <template>
-  <div class="h-screen bg-[#f2f2f2] flex flex-row">
-    <SidebarNav />
+  <div class="h-screen w-screen bg-[#f2f2f2] flex flex-row">
+    <SidebarNav ref="sideBar" v-model="opened"/>
 
-    <main class="w-full h-full flex flex-col min-h-0">
+    <main class="h-full flex flex-col min-h-0" :style="{width: `calc(100vw - ${opened ? widthOpen : widthClose}px)`}">
 
-      <header class="h-16 bg-white shadow-sm flex items-center justify-between layout-header relative">
+      <header class="h-16 w-full bg-white shadow-sm flex items-center justify-between layout-header relative">
         <div class="flex items-center gap-2 left-4 absolute">
           <Icon class="icon-ify icon-home" icon="solar:card-bold" />
           <h2 class="font-semibold text-black">Sistema de <span class="text-gray-500">Requisiciones</span></h2>
@@ -34,7 +34,7 @@
         </div>
       </header>
 
-      <section class="h-full min-h-0 overflow-y-auto">
+      <section class="h-full w-full min-h-0 overflow-y-auto">
         <router-view />
       </section>
 
@@ -46,7 +46,7 @@
 import SidebarNav from '@/components/dashboard/SidebarNav.vue'
 import { useAuthStore } from '@/stores/auth'
 import { Icon } from '@iconify/vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router'
 
 const auth = useAuthStore();
@@ -54,6 +54,20 @@ const router = useRouter()
 const logout = () => { auth.logout(); router.push({ name: 'login' }) }
 
 const openMenuUser = ref<boolean>(false);
+const sideBar = ref<any>(null);
+
+const opened = ref<boolean>(true)
+const widthOpen = ref<number>(0)
+const widthClose = ref<number>(0)
+
+// Asumiendo que sideBar es un ref o reactive ya definido
+onMounted(() => {
+  if (sideBar.value) {
+    widthOpen.value = sideBar.value.widthOpen ?? 250
+    widthClose.value = sideBar.value.widthClose ?? 50
+  }
+})
+
 </script>
 
 <style lang="scss" src="@/styles/layout/layout.scss"></style>

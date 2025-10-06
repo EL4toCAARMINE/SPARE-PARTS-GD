@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full w-full flex flex-col items-start p-8 container-requisitions-view">
+  <div class="h-full w-full max-w-full flex flex-col items-start p-8 container-requisitions-view">
     <h2 class="font-semibold mb-2 shrink-0 requisitions-title">Requisiciones</h2>
 
     <div role="tablist"
@@ -12,33 +12,22 @@
         @click="() => { if (scope !== 'area') fetchData(1); scope = 'area' }">Mi área</button>
     </div>
 
-    <div class="w-full h-full card bg-base-100 shadow-xl">
-      <div class="card-body flex flex-col gap-4 min-h-0 table-container">
-        <DynamicTable 
-          :headers="tableHeaders" 
-          :status-options="statusDefinitions" 
-          :original-items="displayRows"
-          :filtered-items="displayRows" 
-          :is-loading="loading" 
-          v-model:search-value="searchModel"
-          :error-message="errorMsg" :fetch-data="fetchData" status-key="situationId" search-key="folio"
-          :show-search="true" :current-page-prop="pagination.currentPage" :total-pages-prop="pagination.totalPages"
-          :items-per-page-prop="pagination.pageSize" @pageChange="goto" @itemsPerPageChange="changePageSize"
-        >
-          <template #header-content>
-            <div class="w-full flex-grow flex flex-row flex-wrap items-center gap-2 shrink-0">
-              <button v-if="auth.hasRole?.('RequisitionsAdd') && scope === 'mine'" class="button-squeleton button-green">
-                <Icon class="icon-ify icon-button" icon="gridicons:add" /> Nueva Requi
-              </button>
-              <button class="button-squeleton button-light" @click="openDates">
-                <Icon class="icon-ify icon-button-dark" icon="icon-park-solid:filter" /> Filtrar por fechas
-              </button>
-            </div>
-          </template>
-        </DynamicTable>
-
-      </div>
-    </div>
+    <DynamicTable :use-status-in-table="true" :headers="tableMyRequisHeaders" :status-options="statusDefinitions" :original-items="displayRows"
+      :filtered-items="displayRows" :is-loading="loading" v-model:search-value="searchModel" :error-message="errorMsg"
+      :fetch-data="fetchData" status-key="situationId" search-key="folio" :show-search="true"
+      :current-page-prop="pagination.currentPage" :total-pages-prop="pagination.totalPages"
+      :items-per-page-prop="pagination.pageSize" @pageChange="goto" @itemsPerPageChange="changePageSize">
+      <template #header-content>
+        <div class="w-full flex-grow flex flex-row flex-wrap items-center gap-2 shrink-0">
+          <button v-if="auth.hasRole?.('RequisitionsAdd') && scope === 'mine'" class="button-squeleton button-green">
+            <Icon class="icon-ify icon-button" icon="gridicons:add" /> Nueva Requi
+          </button>
+          <button class="button-squeleton button-light" @click="openDates">
+            <Icon class="icon-ify icon-button-dark" icon="icon-park-solid:filter" /> Filtrar por fechas
+          </button>
+        </div>
+      </template>
+    </DynamicTable>
 
     <dialog ref="datesModal" class="absolute modal">
       <div class="modal-box bg-base-100">
@@ -72,6 +61,7 @@ import { useAuthStore } from '@/stores/auth';
 import { Icon } from '@iconify/vue';
 import type { ReqItem } from '@/models/Requis';
 import DynamicTable from '@/components/generals/DynamicTable.vue';
+import { tableMyRequisHeaders } from '@/models/table-headers/tableHeaders';
 
 type PaginationDTO = { totalCount: number; pageSize: number; currentPage: number; totalPages: number }
 type ApiResponse<T> = { response: boolean; message: string; Data: T | null }
@@ -90,21 +80,10 @@ const fromDate = ref<string | null>(null);
 const toDate = ref<string | null>(null);
 const datesModal = ref<HTMLDialogElement | null>(null);
 
-// 👇 2. DEFINIR LA ESTRUCTURA PARA DYNAMICTABLE 👇
-const tableHeaders = {
-  folio: "Folio",
-  folioSap: "Folio SAP",
-  requesterName: "Solicitante",
-  documentDate: "Solicitado",
-  requiredDate: "Requerido",
-  destination: "Destino",
-};
-
 const statusDefinitions = [
-  { id: 10, text: 'Bloqueada', class: 'badge-ghost' },
-  { id: 2, text: 'En Proceso', class: 'badge-info' },
-  { id: 3, text: 'Autorizada', class: 'badge-success' }
-  // Puedes añadir más aquí si es necesario
+  { id: 10, text: 'Bloqueada', class: 'badge-ghost text-black' },
+  { id: 2, text: 'En Proceso', class: 'badge-info text-white' },
+  { id: 3, text: 'Autorizada', class: 'badge-success text-white' }
 ];
 
 // Propiedad computada para formatear las fechas antes de pasarlas a la tabla
@@ -137,8 +116,6 @@ async function fetchData(page = 1) {
   loading.value = true;
   errorMsg.value = null;
 
-  console.log("Mine " + searchMine.value + " - Area " + searchArea.value);
-
   try {
     const params: Record<string, any> = {
       pageNumber: page,
@@ -150,6 +127,63 @@ async function fetchData(page = 1) {
     };
 
     const { data } = await api.get<ApiResponse<PageDTO>>('/api/Requisitions', { params });
+    rows.value = [
+      {
+        id: 1,
+        folio: 1001,
+        folioSap: 50123,
+        requesterName: 'Kevin Alejandro Hernandez Carmona',
+        departmentName: 'Sistemas',
+        requiredDate: '2025-10-01',
+        documentDate: '2025-09-28',
+        destination: 'Oficina Principal',
+        situationId: 2
+      },
+      {
+        id: 2,
+        folio: 1002,
+        folioSap: 50124,
+        requesterName: 'María López',
+        departmentName: 'Finanzas',
+        requiredDate: '2025-10-03',
+        documentDate: '2025-09-29',
+        destination: 'Sucursal Norte',
+        situationId: 2
+      },
+      {
+        id: 3,
+        folio: 1003,
+        folioSap: 50125,
+        requesterName: 'José Hernández',
+        departmentName: 'Compras',
+        requiredDate: '2025-10-05',
+        documentDate: '2025-09-30',
+        destination: 'Almacén Central',
+        situationId: 3
+      },
+      {
+        id: 4,
+        folio: 1004,
+        folioSap: 50126,
+        requesterName: 'Laura Martínez',
+        departmentName: 'Recursos Humanos',
+        requiredDate: '2025-10-07',
+        documentDate: '2025-09-30',
+        destination: 'Sucursal Sur',
+        situationId: 10
+      },
+      {
+        id: 5,
+        folio: 1005,
+        folioSap: 50127,
+        requesterName: 'Carlos Pérez',
+        departmentName: 'Mantenimiento',
+        requiredDate: '2025-10-10',
+        documentDate: '2025-10-01',
+        destination: null,
+        situationId: 2
+      }
+    ]
     if (!data.response || !data.Data) {
       errorMsg.value = data.message || 'No se pudo obtener la información';
       rows.value = [];

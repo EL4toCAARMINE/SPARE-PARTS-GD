@@ -1,13 +1,30 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { MENU, type MenuItem } from '@/menu/menu'
 import { Icon } from '@iconify/vue';
 
+const props = defineProps({
+  modelValue: Boolean
+});
+
+const emit = defineEmits(['update:modelValue'])
+
 const auth = useAuthStore(); const route = useRoute(); const router = useRouter()
-const opened = ref(true)
+const opened = ref(props.modelValue)
 const hasAnyRole = (need?: string[]) => !need?.length || auth.userRoles.some(r => need.includes(r))
+const widthOpen =  ref<number>(250);
+const widthClose =  ref<number>(50);
+
+watch(opened, (val) => {
+  emit('update:modelValue', val)
+})
+
+defineExpose({
+  widthOpen,
+  widthClose
+})
 
 const filteredMenu = computed<MenuItem[]>(() => {
   const filter = (items: MenuItem[]): MenuItem[] =>
@@ -23,7 +40,7 @@ const go = (to?: string) => to && router.push(to)
 
 <template>
   <aside class="h-screen bg-gradient-to-tr from-[#2649AB] to-[#9D50DC] text-white shadow-xl transition-all duration-200 container-nav-menu"
-    :class="opened ? 'w-90' : 'w-20'">
+    :style="{width: opened ? `${widthOpen}px` : `${widthClose}px`}">
 
     <div class="flex flex-row items-center gap-3 px-4 py-4 border-b border-white/10 header-menu" :class="opened ? 'justify-between' : 'justify-center'">
       <img v-if="opened" src="@/assets/logo.webp" class="rounded-full bg-[#ECEBD6] w-10 h-10 object-contain aspect-square" />
