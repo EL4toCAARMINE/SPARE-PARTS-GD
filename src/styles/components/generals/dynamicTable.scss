@@ -55,7 +55,7 @@ body.interact-resizing {
                         color: $light-grey;
 
                         &.table-header-text {
-                            font-family: "OpenSansSemiBold";
+                            font-family: "OpenSansBold";
                             font-size: 1.3rem;
                         }
                     }
@@ -95,6 +95,7 @@ body.interact-resizing {
     // --- PIE DE PÁGINA ---
     .table-footer {
         color: $main-grey;
+
         .items-per-page-select,
         .page-input {
             border-color: $border-color;
@@ -108,15 +109,35 @@ body.interact-resizing {
             }
         }
 
+        .btn-change-page{
+            background-color: $main-purple;
+            color: #fff;
+            height: 25px;
+            width: 25px;
+            font-size: 1.4rem;
+            font-weight: bolder;
+        }
+
         // Estilos de fuente para el footer
         .footer-label-text {
             font-family: "OpenSansRegular";
-            font-size: 1.4rem;
+            font-size: 1.2rem;
         }
+
         .footer-input-text {
             font-family: "OpenSansSemiBold";
-            font-size: 1.4rem;
+            font-size: 1.2rem;
+            width: 50px;
+            outline-color: $main-purple;
         }
+        
+        .footer-select-text {
+            font-family: "OpenSansSemiBold";
+            font-size: 1.2rem;
+            width: 50px;
+            outline: none;
+        }
+
         .footer-total-text {
             font-family: "OpenSansLight";
             font-size: 1.2rem;

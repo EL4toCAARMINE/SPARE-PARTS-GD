@@ -12,11 +12,21 @@
         @click="() => { if (scope !== 'area') fetchData(1); scope = 'area' }">Mi área</button>
     </div>
 
-    <DynamicTable :use-status-in-table="true" :headers="tableMyRequisHeaders" :status-options="statusDefinitions" :original-items="displayRows"
-      :filtered-items="displayRows" :is-loading="loading" v-model:search-value="searchModel" :error-message="errorMsg"
-      :fetch-data="fetchData" status-key="situationId" search-key="folio" :show-search="true"
-      :current-page-prop="pagination.currentPage" :total-pages-prop="pagination.totalPages"
-      :items-per-page-prop="pagination.pageSize" @pageChange="goto" @itemsPerPageChange="changePageSize">
+    <DynamicTable 
+      :show-search="true" 
+      :use-status-in-table="true" 
+      :fetch-data="fetchData"
+      v-model:search-value="searchModel" 
+      :filtered-items="displayRows" 
+      :headers="tableMyRequisHeaders"
+      status-key="situationId" 
+      :status-options="statusDefinitions" 
+      :total-pages="pagination.totalPages"
+      :total-registers="pagination.totalCount" 
+      :is-loading="loading" 
+      :error-message="errorMsg"
+      v-model:page-size="changePageSize" 
+      v-model:page-current="goto">
       <template #header-content>
         <div class="w-full flex-grow flex flex-row flex-wrap items-center gap-2 shrink-0">
           <button v-if="auth.hasRole?.('RequisitionsAdd') && scope === 'mine'" class="button-squeleton button-green">
@@ -61,11 +71,9 @@ import { useAuthStore } from '@/stores/auth';
 import { Icon } from '@iconify/vue';
 import type { ReqItem } from '@/models/Requis';
 import DynamicTable from '@/components/generals/DynamicTable.vue';
-import { tableMyRequisHeaders } from '@/models/table-headers/tableHeaders';
-
-type PaginationDTO = { totalCount: number; pageSize: number; currentPage: number; totalPages: number }
-type ApiResponse<T> = { response: boolean; message: string; Data: T | null }
-type PageDTO = { data: ReqItem[]; pagination: PaginationDTO }
+import { tableMyRequisHeaders } from '@/models/TableHeaders';
+import type { PageDTO, PaginationDTO } from '@/models/ApiResponses';
+import type { ApiResponse } from '@/models/auth';
 
 const auth = useAuthStore();
 
@@ -127,6 +135,8 @@ async function fetchData(page = 1) {
     };
 
     const { data } = await api.get<ApiResponse<PageDTO>>('/api/Requisitions', { params });
+
+    // temporal borrar para prod
     rows.value = [
       {
         id: 1,
@@ -184,10 +194,18 @@ async function fetchData(page = 1) {
         situationId: 2
       }
     ]
+    pagination.value
+    // --
+
     if (!data.response || !data.Data) {
       errorMsg.value = data.message || 'No se pudo obtener la información';
       rows.value = [];
-      pagination.value = { totalCount: 0, pageSize: pagination.value.pageSize, currentPage: 1, totalPages: 0 };
+      pagination.value = {
+        totalCount: 0,
+        pageSize: pagination.value.pageSize,
+        currentPage: 1,
+        totalPages: 0
+      };
       return;
     }
     rows.value = data.Data.data;
@@ -200,15 +218,21 @@ async function fetchData(page = 1) {
 }
 
 // Estas funciones ahora son llamadas por los eventos de DynamicTable
-function changePageSize(size: number) {
-  pagination.value.pageSize = size;
-  fetchData(1);
-}
+const changePageSize = computed({
+  get: () => pagination.value.pageSize,
+  set: (size: number) => {
+    pagination.value.pageSize = size;
+    fetchData(1);
+  }
+})
 
-function goto(p: number) {
-  if (p < 1 || p > pagination.value.totalPages || p === pagination.value.currentPage) return;
-  fetchData(p);
-}
+const goto = computed({
+  get: () => pagination.value.pageSize,
+  set: (page: number) => {
+    pagination.value.currentPage = page;
+    fetchData(page);
+  }
+})
 
 onMounted(() => fetchData(1));
 </script>

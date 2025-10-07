@@ -24,7 +24,7 @@
           <tr class="table-thead-tr">
             <th v-if="useStatusInTable" class="resizable-th p-3 text-center table-header-text">Estatus</th>
             <th v-for="(displayName, key) in headers" :key="key" class="resizable-th p-3 text-center table-header-text">
-                {{ displayName }}
+              {{ displayName }}
             </th>
           </tr>
         </thead>
@@ -61,37 +61,36 @@
       </table>
     </div>
 
-    <!--  <footer class="table-footer flex justify-between items-center mt-4 text-sm">
+    <footer class="table-footer flex justify-between items-center mt-4 text-sm">
       <div class="flex items-center gap-2">
         <span class="footer-label-text">Filas por página:</span>
-        <select v-model.number="itemsPerPage" class="border rounded px-2 py-1 items-per-page-select footer-input-text">
+        <select v-model.number="itemsPerPage" class="border rounded px-2 py-1 items-per-page-select footer-select-text">
           <option>10</option>
           <option>25</option>
           <option>50</option>
           <option>100</option>
         </select>
         <span class="footer-total-text">
-          Total de {{ filteredItems.length }} registros
+          Total de {{ totalRegisters }} registros
         </span>
       </div>
+
       <div class="flex items-center gap-2">
+        <button @click="prevPage" :disabled="currentPage === 1" class="w-8 h-8 rounded border cursor-pointer pagination-arrow btn-change-page">&lt;</button>
+
         <span class="footer-label-text">Página</span>
-        <input type="number" v-model.number="currentPage" class="border rounded px-2 py-1 page-input footer-input-text"
-          :max="totalPages" min="1" />
+        <input type="number" v-model.number="changePage"
+          class="border text-center rounded px-2 py-1 page-input footer-input-text" :max="totalPages" min="1" />
         <span class="footer-total-text">de {{ totalPages }}</span>
-        <div class="flex gap-2">
-          <button @click="prevPage" :disabled="currentPage === 1"
-            class="w-8 h-8 rounded border pagination-arrow">&lt;</button>
-          <button @click="nextPage" :disabled="currentPage === totalPages"
-            class="w-8 h-8 rounded border pagination-arrow">&gt;</button>
-        </div>
+
+        <button @click="nextPage" :disabled="currentPage === totalPages" class="w-8 h-8 rounded border cursor-pointer pagination-arrow btn-change-page">&gt;</button>
       </div>
-    </footer> -->
+    </footer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, defineProps, defineEmits } from 'vue';
+import { ref, watch, defineProps, defineEmits, computed } from 'vue';
 
 // Interface para manejar la columna de status
 interface StatusOption {
@@ -105,20 +104,23 @@ const props = withDefaults(defineProps<{
   useStatusInTable: boolean,
   fetchData: Function,
   searchValue: string,
-  originalItems: Array<Record<string, any>>;
   filteredItems: Array<Record<string, any>>;
   headers: Record<string, string>;
   statusKey: string;
   statusOptions: StatusOption[];
+  totalPages: number;
+  totalRegisters: number;
   isLoading?: boolean;
   errorMessage?: string | null;
+  pageCurrent: number;
+  pageSize: number;
 }>(), {
   useStatusInTable: true,
   statusKey: '',
   searchValue: ''
 });
 
-const emit = defineEmits(['update:searchValue', 'update:filteredItems']);
+const emit = defineEmits(['update:searchValue', 'update:filteredItems', 'update:pageCurrent', 'update:pageSize']);
 
 // Refs
 const searchText = ref<string>(props.searchValue);
@@ -128,8 +130,49 @@ const paginatedItems = ref<Array<Record<string, any>>>([]);
 
 //#region Paginar y actualizar
 
+let timeuot: number;
+
 watch(() => props.filteredItems, (val) => {
   paginatedItems.value = val;
+});
+
+watch(currentPage, (page) => {
+  emit('update:pageCurrent', page);
+});
+
+watch(itemsPerPage, (items) => {
+  emit('update:pageSize', items);
+});
+
+const nextPage = (): void => { if (currentPage.value < props.totalPages) currentPage.value++; };
+const prevPage = (): void => { if (currentPage.value > 1) currentPage.value--; };
+
+const changePage = computed({
+  get: () => currentPage.value,
+  set: (val) => {
+    // Limpiamos el timeout anterior
+    clearTimeout(timeuot);
+
+    // Esperamos 1 seg antes de asignar
+    timeuot = setTimeout(() => {
+      // si es menor que 0 lo asignamos a 1
+      if (val <= 0) {
+        currentPage.value = 1;
+        clearTimeout(timeuot);
+        return;
+      }
+
+      // si es mayor que el total de paginas lo ponemos en la ultima
+      if (val > props.totalPages) {
+        currentPage.value = props.totalPages;
+        clearTimeout(timeuot);
+        return;
+      }
+
+      currentPage.value = val;
+      alert(val);
+    }, 500);
+  }
 });
 
 //#endregion
