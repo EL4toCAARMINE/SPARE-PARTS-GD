@@ -14,6 +14,7 @@
 
     <DynamicTable 
       :show-search="true" 
+      :show-actions="true"
       :use-status-in-table="true" 
       :fetch-data="fetchData"
       v-model:search-value="searchModel" 
@@ -26,7 +27,15 @@
       :is-loading="loading" 
       :error-message="errorMsg"
       v-model:page-size="changePageSize" 
-      v-model:page-current="goto">
+      v-model:page-current="goto"
+      value-to-pass-by-options="id"
+      @click-pdf="printPdf"
+      @click-excel="printExcel"
+      @click-info="seeRequi"
+      @click-edit="updateRequi"
+      @click-delete="deleteRequi"
+      @click-cancel="cancelRequi"
+    >
       <template #header-content>
         <div class="w-full flex-grow flex flex-row flex-wrap items-center gap-2 shrink-0">
           <button v-if="auth.hasRole?.('RequisitionsAdd') && scope === 'mine'" class="button-squeleton button-green">
@@ -74,6 +83,7 @@ import DynamicTable from '@/components/generals/DynamicTable.vue';
 import { tableMyRequisHeaders } from '@/models/TableHeaders';
 import type { PageDTO, PaginationDTO } from '@/models/ApiResponses';
 import type { ApiResponse } from '@/models/auth';
+import type { StatusToTable } from '@/models/StatusToTable';
 
 const auth = useAuthStore();
 
@@ -88,10 +98,10 @@ const fromDate = ref<string | null>(null);
 const toDate = ref<string | null>(null);
 const datesModal = ref<HTMLDialogElement | null>(null);
 
-const statusDefinitions = [
-  { id: 10, text: 'Bloqueada', class: 'badge-ghost text-black' },
-  { id: 2, text: 'En Proceso', class: 'badge-info text-white' },
-  { id: 3, text: 'Autorizada', class: 'badge-success text-white' }
+const statusDefinitions: StatusToTable[] = [
+  { id: 10, text: 'Bloqueada', cssClass: 'badge-ghost', optionsForStatus: ['all'] },
+  { id: 2, text: 'En Proceso', cssClass: 'badge-info', optionsForStatus: ['pdf', 'edit', 'cancel'] },
+  { id: 3, text: 'Autorizada', cssClass: 'badge-success', optionsForStatus: [] }
 ];
 
 // Propiedad computada para formatear las fechas antes de pasarlas a la tabla
@@ -119,7 +129,7 @@ function fmtDate(value?: string | null) {
   return d.toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
-// Lógica de obtención de datos (sin cambios importantes)
+// Lógica de obtención de datos
 async function fetchData(page = 1) {
   loading.value = true;
   errorMsg.value = null;
@@ -217,7 +227,8 @@ async function fetchData(page = 1) {
   }
 }
 
-// Estas funciones ahora son llamadas por los eventos de DynamicTable
+//#region Paginacion
+
 const changePageSize = computed({
   get: () => pagination.value.pageSize,
   set: (size: number) => {
@@ -233,6 +244,36 @@ const goto = computed({
     fetchData(page);
   }
 })
+
+//#endregion
+
+//#region Clicks acciones
+
+const printPdf = (id: number | string):void => {
+  console.log(id + " P");
+}
+
+const printExcel = (id: number | string):void => {
+  console.log(id + " E");
+}
+
+const seeRequi = (id: number | string):void => {
+  console.log(id + " I");
+}
+
+const updateRequi = (id: number | string):void => {
+  console.log(id + " U");
+}
+
+const deleteRequi = (id: number | string):void => {
+  console.log(id + " D");
+}
+
+const cancelRequi = (id: number | string):void => {
+  console.log(id + " C");
+}
+
+//#endregion
 
 onMounted(() => fetchData(1));
 </script>

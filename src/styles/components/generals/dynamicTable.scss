@@ -58,13 +58,56 @@ body.interact-resizing {
                             font-family: "OpenSansBold";
                             font-size: 1.3rem;
                         }
+
+                        &.header-status {
+                            max-width: 125px;
+                        }
+
+                        &.text-actions {
+                            min-width: fit-content;
+                            padding-inline: 20px;
+                        }
                     }
                 }
             }
             tbody tr {
                 border-color: $border-color;
-                &:hover {
-                    background-color: #f5f5f5;
+
+                &.table-tbody-tr:hover {
+                    background-color: $beige;
+                }
+
+                .actions {
+                    .actions-container {
+                        .action-button {
+                            border-radius: 100%;
+                            overflow: hidden;
+                            height: fit-content;
+                            width: auto;
+                            aspect-ratio: 1/1;
+                            padding: 4px;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                            box-shadow: 0 0 5px #00000070;
+
+                            &:hover {
+                                opacity: 0.3;
+                            }
+
+                            .icon-action {
+                                * {
+                                    color: #fff;
+                                }
+                            }
+                        }
+
+                        .no-data {
+                            font-family: OpenSansBold;
+                            font-size: 1.4rem;
+                            user-select: none;
+                            color: #aaa;
+                        }
+                    }
                 }
 
                 .table-cell-text {
@@ -75,15 +118,18 @@ body.interact-resizing {
                     text-overflow: ellipsis;
                     white-space: nowrap;
                 }
+
                 .status-pill-text {
                     font-family: "OpenSansBold";
                     font-size: 1.2rem;
                 }
+
                 .loader-text,
                 .error-text {
                     font-family: "OpenSansSemiBold";
                     font-size: 1.6rem;
                 }
+
                 .no-data-text {
                     font-family: "OpenSansRegular";
                     font-size: 1.4rem;
@@ -109,7 +155,7 @@ body.interact-resizing {
             }
         }
 
-        .btn-change-page{
+        .btn-change-page {
             background-color: $main-purple;
             color: #fff;
             height: 25px;
@@ -130,7 +176,7 @@ body.interact-resizing {
             width: 50px;
             outline-color: $main-purple;
         }
-        
+
         .footer-select-text {
             font-family: "OpenSansSemiBold";
             font-size: 1.2rem;

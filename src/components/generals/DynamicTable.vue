@@ -22,7 +22,8 @@
       <table class="w-full max-w-full overflow-hidden" :class="paginatedItems.length > 0 ? 'h-auto' : 'h-full'">
         <thead>
           <tr class="table-thead-tr">
-            <th v-if="useStatusInTable" class="resizable-th p-3 text-center table-header-text">Estatus</th>
+            <th v-if="useStatusInTable" class="resizable-th p-3 text-center table-header-text header-status">Estatus</th>
+            <th v-if="showActions && paginatedItems.length > 0" class="resizable-th p-3 text-center table-header-text text-actions">Acciones</th>
             <th v-for="(displayName, key) in headers" :key="key" class="resizable-th p-3 text-center table-header-text">
               {{ displayName }}
             </th>
@@ -45,13 +46,53 @@
               No se encontraron resultados.
             </td>
           </tr>
-          <tr v-else v-for="item in paginatedItems" :key="item.id" class="border-t table-tbody-tr">
+          <tr v-else-if="paginatedItems.length > 0" v-for="item in paginatedItems" :key="item.id" class="border-t table-tbody-tr relative">
             <td v-if="useStatusInTable" class="p-3 text-center align-middle">
-              <span :class="getStatusInfo(item[statusKey]).class"
-                class="px-3 py-1 rounded-full text-center inline-block status-pill-text badge h-fit">
+              <span :class="getStatusInfo(item[statusKey]).cssClass"
+                class="px-3 py-1 rounded-full text-center inline-block status-pill-text badge badge-outline badge-soft h-fit">
                 {{ getStatusInfo(item[statusKey]).text }}
               </span>
             </td>
+
+            <td v-if="showActions" class="actions">
+              <div class="actions-container flex-1 flex flex-row items-center justify-center gap-2">
+                
+                <!-- Imprimir PDF -->
+                <div v-if="aproveAction('pdf', getStatusInfo(item[statusKey]).optionsForStatus)" class="action-button bg-red-600" title="Imprimir Pdf" @click="printPdf(item[valueToPassByOptions])">
+                  <Icon icon="proicons:pdf" class="icon-ify icon-action"/>
+                </div>
+
+                <!-- Imprimir Excel -->
+                <div v-if="aproveAction('excel', getStatusInfo(item[statusKey]).optionsForStatus)" class="action-button bg-green-600" title="Imprimir Excel" @click="printExcel(item[valueToPassByOptions])">
+                  <Icon icon="icon-park-solid:excel" class="icon-ify icon-action"/>
+                </div>
+
+                <!-- Detalles -->
+                <div v-if="aproveAction('info', getStatusInfo(item[statusKey]).optionsForStatus)" class="action-button bg-black" title="Detalles" @click="seeDetails(item[valueToPassByOptions])">
+                  <Icon icon="icon-park-twotone:info" class="icon-ify icon-action"/>
+                </div>
+
+                <!-- Editar -->
+                <div v-if="aproveAction('edit', getStatusInfo(item[statusKey]).optionsForStatus)" class="action-button bg-blue-600" title="Editar" @click="updateInfo(item[valueToPassByOptions])">
+                  <Icon icon="bxs:edit" class="icon-ify icon-action"/>
+                </div>
+
+                <!-- Eliminar -->
+                <div v-if="aproveAction('delete', getStatusInfo(item[statusKey]).optionsForStatus)" class="action-button bg-red-600" title="Eliminar" @click="deleteInfo(item[valueToPassByOptions])">
+                  <Icon icon="tdesign:delete" class="icon-ify icon-action"/>
+                </div>
+
+                <!-- Cancelar -->
+                <div v-if="aproveAction('cancel', getStatusInfo(item[statusKey]).optionsForStatus)" class="action-button bg-white" title="Cancelar" @click="cancelInfo(item[valueToPassByOptions])">
+                  <Icon icon="flat-color-icons:cancel" class="icon-ify icon-action"/>
+                </div>
+
+                <!-- No hay acciones disponibles -->
+                <p v-if="getStatusInfo(item[statusKey]).optionsForStatus.length === 0" class="no-data"> Sin acciones </p>
+
+              </div>
+            </td>
+
             <td v-for="key in Object.keys(headers)" :key="key"
               class="min-w-[100px] p-3 text-center align-middle table-cell-text">
               {{ item[key] }}
@@ -90,37 +131,47 @@
 </template>
 
 <script setup lang="ts">
+import type { StatusToTable } from '@/models/StatusToTable';
+import { Icon } from '@iconify/vue';
 import { ref, watch, defineProps, defineEmits, computed } from 'vue';
-
-// Interface para manejar la columna de status
-interface StatusOption {
-  id: number | string;
-  text: string;
-  class: string;
-}
 
 const props = withDefaults(defineProps<{
   showSearch: boolean,
+  showActions: boolean,
   useStatusInTable: boolean,
   fetchData: Function,
   searchValue: string,
   filteredItems: Array<Record<string, any>>;
   headers: Record<string, string>;
   statusKey: string;
-  statusOptions: StatusOption[];
+  statusOptions: StatusToTable[];
   totalPages: number;
   totalRegisters: number;
   isLoading?: boolean;
   errorMessage?: string | null;
   pageCurrent: number;
   pageSize: number;
+  valueToPassByOptions: number | string; 
 }>(), {
+  showSearch: true,
   useStatusInTable: true,
+  showActions: true,
   statusKey: '',
   searchValue: ''
 });
 
-const emit = defineEmits(['update:searchValue', 'update:filteredItems', 'update:pageCurrent', 'update:pageSize']);
+const emit = defineEmits([
+  'update:searchValue', 
+  'update:filteredItems', 
+  'update:pageCurrent', 
+  'update:pageSize',
+  'click-pdf',
+  'click-excel',
+  'click-info',
+  'click-edit',
+  'click-delete',
+  'click-cancel'
+]);
 
 // Refs
 const searchText = ref<string>(props.searchValue);
@@ -128,7 +179,7 @@ const currentPage = ref<number>(1);
 const itemsPerPage = ref<number>(10);
 const paginatedItems = ref<Array<Record<string, any>>>([]);
 
-//#region Paginar y actualizar
+//#region Paginar y actualizar cantidad de elementos por page
 
 let timeuot: number;
 
@@ -193,12 +244,50 @@ watch(() => props.searchValue, (val) => {
 //#region Definir status
 
 // Función auxiliar para encontrar la información de un estado (texto y clase) a partir de su ID.
-const getStatusInfo = (statusId: number | string): { text: string; class: string } => {
+const getStatusInfo = (statusId: number | string): StatusToTable => {
   const status = props.statusOptions.find(opt => opt.id === statusId);
 
   // Si no se encuentra un estado, devuelve uno por defecto.
-  return status || { text: 'Desconocido', class: 'bg-gray-200 text-gray-800' };
+  return status || {id: 0, text: 'Desconocido', cssClass: 'badge-ghost', optionsForStatus: [] };
 };
+
+// Buscar si contiene los ations que se solicitan 
+const aproveAction = (valu: string, options: string[]) : boolean => {
+  if (options.length <= 0 ) return false;
+
+  let canSee:boolean = options.some(opt => [valu, 'all'].includes(opt));
+  return canSee;
+}
+
+// Acción que se ejecuta al presionar imprimir pdf
+const printPdf = (id: number | string): void => {
+  emit('click-pdf', id);
+}
+
+// Acción que se ejecuta al presionar imprimir excel
+const printExcel = (id: number | string): void => {
+  emit('click-excel', id);
+}
+
+// Acción que se ejecuta al presionar ver detalles
+const seeDetails = (id: number | string): void => {
+  emit('click-info', id);
+}
+
+// Acción que se ejecuta al presionar editar
+const updateInfo = (id: number | string): void => {
+  emit('click-edit', id);
+}
+
+// Acción que se ejecuta al presionar eliminar
+const deleteInfo = (id: number | string): void => {
+  emit('click-delete', id);
+}
+
+// Acción que se ejecuta al presionar cancelar
+const cancelInfo = (id: number | string): void => {
+  emit('click-cancel', id);
+}
 
 //#endregion
 

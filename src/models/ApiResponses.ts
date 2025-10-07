@@ -10,8 +10,8 @@ export type ApiResponse<T> = {
     response: boolean; 
     message: string; 
     Data: T | null 
-
 }
+
 export type PageDTO = { 
     data: any; pagination: 
     PaginationDTO 
