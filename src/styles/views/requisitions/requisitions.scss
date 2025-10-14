@@ -27,77 +27,11 @@
         }
     }
 
-    // .table-container {
-    //     .search-data-container {
-    //         border: 2px solid $main-purple;
-
-    //         input {
-    //             font-family: OpenSansSemiBold;
-    //             font-size: 1.3rem;
-    //         }
-
-    //         .button-search {
-    //             border-radius: 0;
-    //         }
-    //     }
-
-    //     .table-content-container {
-    //         table {
-    //             thead {
-    //                 background-color: $main-grey;
-    //                 color: #fff;
-
-    //                 tr {
-    //                     th {
-    //                         font-family: OpenSansBold;
-    //                         font-size: 1.2rem;
-    //                         text-align: center;
-    //                     }
-    //                 }
-    //             }
-    //             tbody {
-    //                 tr {
-    //                     div,
-    //                     .text-error,
-    //                     .no-data {
-    //                         font-family: OpenSansBold;
-    //                         font-size: 1.6rem;
-    //                     }
-    //                 }
-
-    //                 .row-container {
-    //                     font-family: OpenSansRegular;
-    //                     font-size: 1.3rem;
-    //                     text-align: center;
-
-    //                     div {
-    //                         display: flex;
-    //                         justify-content: center;
-    //                         align-items: center;
-
-    //                         span {
-    //                             font-family: OpenSansBold;
-    //                             font-size: 1.2rem;
-    //                             text-transform: capitalize;
-    //                             color: #fff;
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     .bottom-table{
-    //         *{
-    //             font-family: OpenSansRegular;
-    //             font-size: 1.1rem;
-    //         }
-
-    //         .icon-expand{
-    //             font-size: 1.6rem;
-    //             rotate: 180deg;
-    //             transition: all .3s ease;
-    //         }
-    //     }
-    // }
+    .container-buttons {
+        .dates-text {
+            font-size: 1.6rem;
+            font-family: OpenSansBolder;
+            color: $main-blue;
+        }
+    }
 }

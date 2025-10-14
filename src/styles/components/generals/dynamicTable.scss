@@ -47,8 +47,12 @@ body.interact-resizing {
                         height: 35px;
                         border-right: 1px solid #fff;
                         min-width: 100px;
-                        resize: horizontal;
+                        // resize: horizontal; // Activar si se quierte el resize pero la tabla lo limita a su contenido y no permite q se expanda lo nesesario
                         position: relative;
+
+                        &:last-of-type{
+                            border: 0;
+                        }
                     }
 
                     th {
@@ -95,6 +99,8 @@ body.interact-resizing {
                             }
 
                             .icon-action {
+                                font-size: 1.5rem;
+
                                 * {
                                     color: #fff;
                                 }
@@ -114,7 +120,7 @@ body.interact-resizing {
                     font-family: "OpenSansRegular";
                     font-size: 1.4rem;
                     overflow: hidden;
-                    max-width: 100px;
+                    // max-width: 100px;
                     text-overflow: ellipsis;
                     white-space: nowrap;
                 }

@@ -12,64 +12,26 @@
         @click="() => { if (scope !== 'area') fetchData(1); scope = 'area' }">Mi área</button>
     </div>
 
-    <DynamicTable 
-      :show-search="true" 
-      :show-actions="true"
-      :use-status-in-table="true" 
-      :fetch-data="fetchData"
-      v-model:search-value="searchModel" 
-      :filtered-items="displayRows" 
-      :headers="tableMyRequisHeaders"
-      status-key="situationId" 
-      :status-options="statusDefinitions" 
-      :total-pages="pagination.totalPages"
-      :total-registers="pagination.totalCount" 
-      :is-loading="loading" 
-      :error-message="errorMsg"
-      v-model:page-size="changePageSize" 
-      v-model:page-current="goto"
-      value-to-pass-by-options="id"
-      @click-pdf="printPdf"
-      @click-excel="printExcel"
-      @click-info="seeRequi"
-      @click-edit="updateRequi"
-      @click-delete="deleteRequi"
-      @click-cancel="cancelRequi"
-    >
+    <DynamicTable :show-search="true" :show-actions="true" :use-status-in-table="true" :fetch-data="fetchData"
+      v-model:search-value="searchModel" :filtered-items="displayRows" :headers="tableMyRequisHeaders"
+      status-key="situationId" :status-options="statusDefinitions" :total-pages="pagination.totalPages"
+      :total-registers="pagination.totalCount" :is-loading="loading" :error-message="errorMsg"
+      v-model:page-size="changePageSize" v-model:page-current="goto" value-to-pass-by-options="id" @click-pdf="printPdf"
+      @click-excel="printExcel" @click-info="seeRequi" @click-edit="updateRequi" @click-delete="deleteRequi"
+      @click-cancel="cancelRequi">
       <template #header-content>
-        <div class="w-full flex-grow flex flex-row flex-wrap items-center gap-2 shrink-0">
+        <div class="w-full flex-grow flex flex-row flex-wrap items-center gap-2 shrink-0 container-buttons">
           <button v-if="auth.hasRole?.('RequisitionsAdd') && scope === 'mine'" class="button-squeleton button-green">
             <Icon class="icon-ify icon-button" icon="gridicons:add" /> Nueva Requi
           </button>
-          <button class="button-squeleton button-light" @click="openDates">
-            <Icon class="icon-ify icon-button-dark" icon="icon-park-solid:filter" /> Filtrar por fechas
-          </button>
+
+          <FilterDatesModal v-if="scope === 'mine'" v-model:to-date-prop="toDateModel" v-model:from-date-prop="fromDateModel" :fetch-data="() => fetchData(1)" />
+
+          <FilterDatesModal v-else v-model:to-date-prop="toDateModel" v-model:from-date-prop="fromDateModel" :fetch-data="() => fetchData(1)" />
         </div>
       </template>
     </DynamicTable>
 
-    <dialog ref="datesModal" class="absolute modal">
-      <div class="modal-box bg-base-100">
-        <h3 class="font-bold text-lg mb-2">Filtrar por fechas</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <label class="form-control">
-            <span class="label-text">Desde</span>
-            <input type="date" v-model="fromDate" class="input input-bordered" />
-          </label>
-          <label class="form-control">
-            <span class="label-text">Hasta</span>
-            <input type="date" v-model="toDate" class="input input-bordered" />
-          </label>
-        </div>
-        <div class="modal-action">
-          <button class="btn btn-ghost" @click="closeDates">Cancelar</button>
-          <button class="btn btn-primary" @click="applyDates">Aplicar</button>
-        </div>
-      </div>
-      <form method="dialog" class="modal-backdrop" @click="closeDates">
-        <button>close</button>
-      </form>
-    </dialog>
   </div>
 </template>
 
@@ -84,6 +46,7 @@ import { tableMyRequisHeaders } from '@/models/TableHeaders';
 import type { PageDTO, PaginationDTO } from '@/models/ApiResponses';
 import type { ApiResponse } from '@/models/auth';
 import type { StatusToTable } from '@/models/StatusToTable';
+import FilterDatesModal from '@/components/generals/FilterDatesModal.vue';
 
 const auth = useAuthStore();
 
@@ -94,15 +57,41 @@ const pagination = ref<PaginationDTO>({ totalCount: 0, pageSize: 10, currentPage
 const scope = ref<'mine' | 'area'>('mine');
 const searchMine = ref('');
 const searchArea = ref('');
-const fromDate = ref<string | null>(null);
-const toDate = ref<string | null>(null);
-const datesModal = ref<HTMLDialogElement | null>(null);
+const myFromDate = ref<string | null>(null);
+const myToDate = ref<string | null>(null);
+const areaFromDate = ref<string | null>(null);
+const areaToDate = ref<string | null>(null);
 
 const statusDefinitions: StatusToTable[] = [
   { id: 10, text: 'Bloqueada', cssClass: 'badge-ghost', optionsForStatus: ['all'] },
   { id: 2, text: 'En Proceso', cssClass: 'badge-info', optionsForStatus: ['pdf', 'edit', 'cancel'] },
   { id: 3, text: 'Autorizada', cssClass: 'badge-success', optionsForStatus: [] }
 ];
+
+const searchModel = computed({
+  get: () => scope.value === 'mine' ? searchMine.value : searchArea.value,
+  set: (val) => { if (scope.value === 'mine') searchMine.value = val; else searchArea.value = val; }
+});
+
+//#region Fechas 
+
+// modelo para fecha desde segun la tabla seleccionada
+const fromDateModel = computed({
+  get: () => scope.value === 'mine' ? myFromDate.value : areaFromDate.value,
+  set: (val) => { if (scope.value === 'mine') myFromDate.value = val; else areaFromDate.value = val; }
+});
+
+// modelo para fecha hasta segun la tabla seleccionada
+const toDateModel = computed({
+  get: () => scope.value === 'mine' ? myToDate.value : areaToDate.value,
+  set: (val) => { if (scope.value === 'mine') myToDate.value = val; else areaToDate.value = val; }
+});
+
+function fmtDate(value?: string | null) {
+  if (!value) return '';
+  const d = new Date(value);
+  return d.toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' });
+}
 
 // Propiedad computada para formatear las fechas antes de pasarlas a la tabla
 const displayRows = computed(() => {
@@ -114,33 +103,20 @@ const displayRows = computed(() => {
   }));
 });
 
-const searchModel = computed({
-  get: () => scope.value === 'mine' ? searchMine.value : searchArea.value,
-  set: (val) => { if (scope.value === 'mine') searchMine.value = val; else searchArea.value = val; }
-});
-
-const openDates = () => datesModal.value?.showModal();
-const closeDates = () => datesModal.value?.close();
-const applyDates = () => { closeDates(); fetchData(1); };
-
-function fmtDate(value?: string | null) {
-  if (!value) return '';
-  const d = new Date(value);
-  return d.toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' });
-}
+//#endregion
 
 // Lógica de obtención de datos
-async function fetchData(page = 1) {
+async function fetchData(page: number = 0): Promise<void> {
   loading.value = true;
   errorMsg.value = null;
-
+  
   try {
     const params: Record<string, any> = {
       pageNumber: page,
       pageSize: pagination.value.pageSize,
       search: searchModel.value,
-      fromDate: fromDate.value,
-      toDate: toDate.value,
+      fromDate: fromDateModel.value,
+      toDate: toDateModel.value,
       scope: scope.value,
     };
 
@@ -249,27 +225,27 @@ const goto = computed({
 
 //#region Clicks acciones
 
-const printPdf = (id: number | string):void => {
+const printPdf = (id: number | string): void => {
   console.log(id + " P");
 }
 
-const printExcel = (id: number | string):void => {
+const printExcel = (id: number | string): void => {
   console.log(id + " E");
 }
 
-const seeRequi = (id: number | string):void => {
+const seeRequi = (id: number | string): void => {
   console.log(id + " I");
 }
 
-const updateRequi = (id: number | string):void => {
+const updateRequi = (id: number | string): void => {
   console.log(id + " U");
 }
 
-const deleteRequi = (id: number | string):void => {
+const deleteRequi = (id: number | string): void => {
   console.log(id + " D");
 }
 
-const cancelRequi = (id: number | string):void => {
+const cancelRequi = (id: number | string): void => {
   console.log(id + " C");
 }
 

@@ -3,6 +3,7 @@ $main-blue: #2649ab;
 $main-green: #2b9a66;
 $main-black: #292929;
 $main-grey: #494949;
+$main-gradient: linear-gradient(45deg, $main-blue, $main-purple);
 
 $beige: beige;
 $white: #ffffff;
@@ -24,6 +25,7 @@ $border-color: #e0e0e0;
   cursor: pointer;
   border-radius: 8px;
   transition: all 0.3s ease;
+  border: 2px solid transparent;
 
   &:hover {
     background: #464646;
@@ -112,19 +114,49 @@ $border-color: #e0e0e0;
 .button-alternative {
   background: #ffffff;
   color: #000;
-  border: 1px solid #000;
+  border: 2px solid #000;
 
   &:hover {
     background: #e1e1e1;
-    color: $main-blue;
   }
 }
 
 .button-gradient {
-  background: linear-gradient(45deg, $main-blue, $main-purple);
+  background: $main-gradient;
 
   &:hover {
-    background: linear-gradient(45deg, $main-blue, $main-purple);
-    opacity: .8;
+    background: $main-gradient;
+    opacity: 0.8;
+  }
+}
+
+// Alerta de sweetAlert
+.alertSwal {
+  z-index: 9999 !important;
+
+  .popup {
+    border-radius: 10px;
+
+    .title {
+      font-family: OpenSansBold;
+      font-size: 1.7rem;
+    }
+
+    .text {
+      font-family: OpenSansSemiBold;
+      font-size: 1.2rem;
+    }
+
+    .button {
+      @extend .button-squeleton;
+      @extend .button-blue;
+      font-size: 1.4rem;
+    }
+
+    .buttonCancel {
+      @extend .button-squeleton;
+      @extend .button-purple;
+      font-size: 1.4rem;
+    }
   }
 }
